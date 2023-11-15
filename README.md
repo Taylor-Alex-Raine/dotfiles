@@ -1,5 +1,11 @@
 # Basics 
 
+### If using WSL2,
+
+- Install a [Nerd Font](https://github.com/ryanoasis/nerd-fonts) (Ubuntu Mono preferred) in window terminal and set it as the default font
+- Set windows terminal theme to [catppuccin macchiato](https://github.com/catppuccin/windows-terminal)
+
+
 Just to get ready, we will go ahead these packages
 
     sudo apt-get install fish neofetch powerline terminfo zsh
