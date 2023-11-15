@@ -1,11 +1,6 @@
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-end
-
-if [ $TMUX ]
-	set -U fish_greeting
-else
-	function fish_greeting    
+# greeting that only prints once per tmux session
+function fish_greeting
+	if test -z "$SURPRESS_GREETING"
 		set_color brgreen; printf "                              "
 		printf " _         _.*\"\\      \n"
 		set_color normal; printf "fish are friends, not food    "
@@ -15,9 +10,26 @@ else
 		printf "                              ";
 		printf " /.'\"*--.__)_.''_.-*   \n\n"; 
 		set_color normal;
+		if test -n "$TMUX"
+			and status --is-interactive			
+				tmux setenv SURPRESS_GREETING 1
+		end
+	else 
+		clear
 	end
-end 
+end
 
-set fish_function_path $fish_function_path "/usr/share/powerline/bindings/fish"
-source /usr/share/powerline/bindings/fish/powerline-setup.fish
-powerline-setup
+# in tmux change name and supress greeting
+if test -z "$TMUX"
+	and status --is-interactive		
+		tmux new -A -s '󰈺'
+end
+
+# use the terminal compiled xterminal
+set -gx TERM xterm-256color-italic
+
+set -l fish_function_path $fish_function_path "/usr/share/powerline/bindings/fish"
+if status --is-interactive
+	source /usr/share/powerline/bindings/fish/powerline-setup.fish
+	powerline-setup
+end
