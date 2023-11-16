@@ -57,7 +57,7 @@ to compile the xterminal.
 
 Run the commands below to install tmux and tpm
 
-    sudo apt-git install tmux
+    sudo apt-get install tmux
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 then if tmux is already running, run `tmux source ~/.tmux.conf` to reload the config. 
@@ -68,22 +68,73 @@ Run TPM's install script with `prefix` + <kbd>I</kbd> (here I have the prefix as
 
 Fish checks its config on launch, so no source command is needed. We can set it as the default shell with the below. 
 
-    sudo echo /usr/bin/fish | sudo tee -a /etc/shells
-    sudo chsh -s /usr/bin/fish
+    sudo echo $(which fish) | sudo tee -a /etc/shells
+    sudo chsh -s $(which fish)
+
+it may be necessary to log out and back in at this point, depending on your system
 
 _note that current my config.fish auto opens tmux if it is not already running_
 
-# `Vim` Install
+# `VIM`
+
+### Option 1: `nvim` install without `powerline`
+
+run 
+ 
+    sudo apt-get install curl neovim nodejs 
+    sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+then open `nvim` and run `:PlugInstall`. `nvim` is very likely to produce errors before the install command is issued.
+
+-----
+
+### Option 2: `vim` with `powerline`
+
+     sudo apt-get install curl neovim nodejs npm 
+   
 
 We will mostly follow [Zoey Greer's vim install script](https://github.com/tempoz/dotfiles) - though we will use `catppuccin/vim` instead of using powerline
   
     sudo apt-get update
     sudo apt-get upgrade
+    sudo apt-get remove vim vim-runtime gvim 
+    sudo apt-get autoremove
     sudo apt-get install python3-dev clang make man curl git-lfs 7zip libgtk-3-dev vim-gtk3 liblua5.4-dev lua5.4 tig 
 
-compile with
+-- 
+
     
-    ./configure --enable-multibyte --enable-rubyinterp --enable-python3interp --with-python3-config-dir=(python3-config --configdir) --enable-perlinterp --enable-luainterp --disable-pythoninterp --disable-mzschemeinterp --enable-tclinterp --with-tclsh=/usr/bin/tclsh --with-features=huge --prefix=/usr/ --enable-cscope --disable-gui --enable-autoservername='yes' --enable-gui=gtk3
+    mkdir ~/programs
+    cd ~/programs
+    git clone https://github.com/vim/vim.git
+    cd vim
+
+configure with the following options
+    
+    ./configure --enable-multibyte                                      \
+                --enable-rubyinterp                                     \
+                --disable-pythoninterp                                  \
+                --enable-python3interp                                  \
+                --with-python3-config-dir=(python3-config --configdir)  \
+                --enable-perlinterp                                     \
+                --enable-luainterp                                      \
+                --disable-mzschemeinterp                                \
+                --enable-tclinterp                                      \
+                --with-tclsh=/usr/bin/tclsh                             \
+                --with-features=huge                                    \
+                --prefix=/usr/                                          \
+                --enable-cscope                                         \
+                --enable-autoservername='yes'                           \
+                --disable-gui                                           \
+                --enable-gui=gtk3
+
+then compile with 
+
+    cd /src
+    make VIMRUNTIMEDIR=~/programs/vim/runtime
+    sudo make install
+    cd ~
 
 ## [vim-plug](https://github.com/junegunn/vim-plug) install
 
