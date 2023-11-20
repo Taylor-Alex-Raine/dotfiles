@@ -35,6 +35,16 @@ if we run into `ldconfig: /usr/lib/wsl/lib/libcuda.so.1 is not a symbolic link`,
     sudo ldconfig
     cd ~
 
+either way, if on Debian or Ubuntu, make sure to run
+
+    sudo apt-get install cuda-toolkit
+
+if on ubuntu run 
+
+    sudo apt-get install nvidia-gds
+
+then restart the wsl environment
+
 -----
 
 # Load dotfiles
@@ -75,11 +85,19 @@ it may be necessary to log out and back in at this point, depending on your syst
 
 _note that current my config.fish auto opens tmux if it is not already running_
 
+## Configure [`powerline`](https://powerline.readthedocs.io/en/master/)
+
+Run the following to configure powerline to use the config from `~/.config/powerline/config.json`
+
+    powerline-config tmux setup
+    powerline-daemon --replace
+
+
 # `VIM`
 
 ### Option 1: `nvim` install without `powerline`
 
-run 
+this will with `catppuccin/vim` instead of using powerline for nvim
  
     sudo apt-get install curl neovim nodejs 
     sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
@@ -92,9 +110,8 @@ then open `nvim` and run `:PlugInstall`. `nvim` is very likely to produce errors
 ### Option 2: `vim` with `powerline`
 
      sudo apt-get install curl neovim nodejs npm 
-   
 
-We will mostly follow [Zoey Greer's vim install script](https://github.com/tempoz/dotfiles) - though we will use `catppuccin/vim` instead of using powerline
+We will mostly follow [Zoey Greer's vim install script](https://github.com/tempoz/dotfiles)
   
     sudo apt-get update
     sudo apt-get upgrade
@@ -102,9 +119,8 @@ We will mostly follow [Zoey Greer's vim install script](https://github.com/tempo
     sudo apt-get autoremove
     sudo apt-get install python3-dev clang make man curl git-lfs 7zip libgtk-3-dev vim-gtk3 liblua5.4-dev lua5.4 tig 
 
--- 
+then run 
 
-    
     mkdir ~/programs
     cd ~/programs
     git clone https://github.com/vim/vim.git
@@ -136,7 +152,7 @@ then compile with
     sudo make install
     cd ~
 
-## [vim-plug](https://github.com/junegunn/vim-plug) install
+#### [vim-plug](https://github.com/junegunn/vim-plug) install
 
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
